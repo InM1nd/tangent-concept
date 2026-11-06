@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Website concept for TANGENT EVENTS, Vienna. Unofficial design proposal by Oleksandr Zabolotnyi.">
+<title>Tangent Point of Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<canvas id="flat" aria-hidden="true"></canvas>
+
+<div class="pre" aria-hidden="true"><div class="pre-in">
+  <div class="pre-row"><span>TANGENT<sup>1</sup></span><span><b id="preN">000</b> BPM</span></div>
+  <div class="pre-line"></div>
+  <div class="pre-row"><span>Wien</span><span id="preT">Finding the point of contact</span></div>
+</div></div>
+
+<div class="prog" aria-hidden="true"><b id="progB"></b><i id="progI"></i></div>
+<nav class="nav in" id="nav">
+  <span class="wm">TANGENT<sup>1</sup></span>
+  <span class="links"><a href="#services" data-i18n="nav_services">Services</a><a href="#showcase" data-i18n="nav_events">Events</a><a href="#clients" data-i18n="nav_clients">Clients</a><a href="https://www.tangent-events.com/en/gallery/tangent-showcase" target="_blank" rel="noopener" data-i18n="nav_gallery">Gallery ↗</a></span>
+  <span class="nav-r">
+    <span class="lang" role="group" aria-label="Language"><button data-lang="de" aria-pressed="false">DE</button><span>·</span><button data-lang="en" aria-pressed="true">EN</button></span>
+    <a class="tl" href="#contact" data-cur="Write"><svg viewBox="0 0 52 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><line x1="10" y1="19" x2="52" y2="19"/><circle class="pt" cx="10" cy="19" r="2.4"/></svg><span data-i18n="cta">Request a proposal</span></a>
+  </span>
+</nav>
+<div class="idx" aria-hidden="true"><span id="idxN">01</span><span>/ 08</span><em id="idxL">Intro</em></div>
+
+<main>
+<!-- HERO -->
+<section class="hero" data-ring="hero" id="top">
+  <div class="hero-copy in" id="heroCopy">
+    <h1><span class="rl"><span data-i18n="h1a">Premium events,</span></span><span class="rl"><span><em data-i18n="h1b">end to end.</em></span></span></h1>
+    <div class="hero-row fade">
+      <p class="lede" data-i18n="lede">Planning, production and on-site delivery from one Vienna-based team. One point of contact, from the first call to the last guest.</p>
+      <a class="tl big" href="#contact" data-cur="Write"><svg viewBox="0 0 52 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><line x1="10" y1="19" x2="52" y2="19"/><circle class="pt" cx="10" cy="19" r="2.4"/></svg><span data-i18n="cta">Request a proposal</span></a>
+    </div>
+  </div>
+  <div class="hero-foot in fade">
+    <span><sup>1</sup><i>tan·gent</i><span data-i18n="def">a line that touches a circle at exactly one point.</span></span>
+    <span class="scrollcue"><i></i><span data-i18n="scroll">Scroll</span></span>
+    <span class="num" id="theta">θ 000.0°</span>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto in" data-ring="manifesto" id="manifesto">
+  <p id="mani"></p>
+  <p class="k" data-i18n="mani_k">Event production · Wien</p>
+</section>
+
+<!-- SERVICES -->
+<section class="cream in" id="services" data-ring="cream">
+  <div class="svc-head">
+    <h2 class="rv" data-i18n="svc_h">Seven services.<br><em>One point of contact.</em></h2>
+    <p class="sub rv" data-i18n="svc_sub2">Every service reaches you through the same point: one team, one timeline, one quality bar.</p>
+  </div>
+  <div class="svc-grid">
+    <ol class="svc rv" id="svc"></ol>
+    <div class="orbit rv" id="orbit">
+      <div class="orbit-photo" id="orbitPhoto"></div>
+      <svg id="orbitSvg" viewBox="0 0 620 620" aria-hidden="true"></svg>
+      <div class="orbit-cap" id="orbitCap"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="show" id="showcase" data-ring="showcase">
+  <div class="show-pin" id="showPin">
+    <div class="show-sticky">
+      <div class="show-top in"><p class="k" data-i18n="show_k">Showcase</p><span class="num" id="showCount">01 / 12</span></div>
+      <div class="show-track" id="showTrack"></div>
+      <div class="in"><div class="show-bar"><i id="showProg"></i></div></div>
+    </div>
+  </div>
+  <div class="sm in" id="showMob"></div>
+</section>
+
+<!-- FORMATS -->
+<section class="marq" data-ring="marq" aria-label="Event formats">
+  <div class="track" id="t1"></div>
+  <div class="track" id="t2"></div>
+</section>
+
+<!-- MUSIC -->
+<section class="sound in" id="sound" data-ring="sound">
+  <div>
+    <h2 class="rv" data-i18n="snd_h">Curated DJs.<br><em>A tempo for every moment.</em></h2>
+    <p class="intro rv" data-i18n="snd_p">Our DJs and live acts follow the evening. Pick a genre profile and listen: the stage keeps the beat.</p>
+    <ul class="genres rv" id="genres"></ul>
+  </div>
+  <div class="bpm rv" id="bpmBox"><b id="bpmN">120</b><span><i class="beat" id="beatDot"></i><span id="bpmL">BPM · Deep House</span></span></div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients in" id="clients" data-ring="clients">
+  <div class="head">
+    <h2 class="rv" data-i18n="cli_h">Trusted by brands that care about detail.</h2>
+    <p class="rv" data-i18n="cli_p">Selected collaborations in Vienna and beyond, built for long-term partnerships.</p>
+  </div>
+  <ul class="names rv" id="names"></ul>
+</section>
+
+<!-- CONTACT -->
+<section class="contact in" id="contact" data-ring="end">
+  <h2 class="rv" data-i18n="con_h">Let’s plan<br><em>your next event.</em></h2>
+  <p class="rv" data-i18n="con_p">Send date, city, guest count and format. We come back with a clear next step.</p>
+  <form id="f" novalidate class="rv">
+    <label for="fDate"><span data-i18n="f_date">Date</span><input id="fDate" data-i18n-ph="ph_date" placeholder="14 November"></label>
+    <label for="fCity"><span data-i18n="f_city">City</span><input id="fCity" placeholder="Wien"></label>
+    <label for="fGuests"><span data-i18n="f_guests">Guests</span><input id="fGuests" inputmode="numeric" placeholder="150"></label>
+    <label for="fFormat"><span data-i18n="f_format">Format</span><select id="fFormat"></select></label>
+    <button type="submit" class="tl big" data-cur="Send"><svg viewBox="0 0 52 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><line x1="10" y1="19" x2="52" y2="19"/><circle class="pt" cx="10" cy="19" r="2.4"/></svg><span data-i18n="send">Send request</span></button>
+  </form>
+  <p class="formnote" id="fnote"></p>
+  <div class="giant" id="giant" aria-hidden="true"><span>T</span><span>A</span><span>N</span><span>G</span><span>E</span><span>N</span><span>T</span></div>
+  <footer><span>© 2026 Tangent Events · Wien</span><nav><span>Impressum</span><span>AGB</span><span>Datenschutz</span></nav></footer>
+</section>
+</main>
+
+
+<div class="ctl l"><button id="soundBtn" aria-pressed="false" data-cur="Listen"><span class="eq" id="eq"><i></i><i></i><i></i><i></i></span><span id="soundLbl">Sound off</span></button><span class="sep"></span><span class="modes" role="group" aria-label="Display mode"><button data-mode="gl" aria-pressed="true" data-cur="3D stage">Cinematic</button><button data-mode="flat" aria-pressed="false" data-cur="Line art">Essential</button></span></div>
+<div class="ctl r" role="group" aria-label="Accent light">
+  <span class="lbl" style="padding:0 6px 0 10px">Light</span>
+  <button data-acc="#e3b26e" style="--c:#e3b26e" aria-pressed="false"><i class="sw"></i>Golden</button>
+  <button data-acc="#db7a4e" style="--c:#db7a4e" aria-pressed="true"><i class="sw"></i>Ember</button>
+  <button data-acc="#7389e8" style="--c:#7389e8" aria-pressed="false"><i class="sw"></i>Blue</button>
+</div>
+<div class="cur" id="cur"><div class="ring"></div><div class="lab" id="curLab"></div></div>
+
+<script src="app.js"></script>
+</body>
+</html>
