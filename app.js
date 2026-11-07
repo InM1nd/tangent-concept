@@ -96,16 +96,19 @@ var G=[
 var S={accBase:hex('#db7a4e'),acc:hex('#db7a4e'),theta:-2.25,thetaT:null,beat:0,age:9,par:[0,0],parT:[0,0],genre:2,
   p:null,stage:'hero',snd:0};
 var mobile=function(){return innerWidth<760;};
+var touch=!!(window.matchMedia&&matchMedia('(hover:none) and (pointer:coarse)').matches);
+// stage viewport: canvases are sized to the large viewport (100lvh), so the mobile URL bar showing/hiding never resizes the stage or shifts the ring
+var VW=innerWidth,VH=innerHeight;
 // pose: x,y = ring centre, s = radius, tilt = rotation about x, i = intensity, snd = genre-colour weight
 var POSE={
   hero:     function(m){return m?{x:.22,y:.66,s:.62,tilt:1.22,i:1,snd:0}:{x:1.08,y:.06,s:1.0,tilt:1.2,i:1,snd:0};},
   manifesto:function(m){return m?{x:0,y:.05,s:.95,tilt:.2,i:.85,snd:0}:{x:0,y:-.05,s:1.6,tilt:.18,i:.85,snd:0};},
   marq:     function(m){return m?{x:0,y:-.15,s:1.1,tilt:.1,i:.7,snd:0}:{x:0,y:-.25,s:1.9,tilt:.08,i:.7,snd:0};},
   cream:    function(m){return m?{x:0,y:-.15,s:1.1,tilt:.1,i:.6,snd:0}:{x:0,y:-.25,s:1.9,tilt:.08,i:.6,snd:0};},
-  showcase: function(m){return m?{x:0,y:1.55,s:1.3,tilt:.16,i:.5,snd:0}:{x:0,y:1.62,s:2.6,tilt:.1,i:.5,snd:0};},
+  showcase: function(m){return m?{x:0,y:1.30,s:1.3,tilt:.16,i:.5,snd:0}:{x:0,y:1.62,s:2.6,tilt:.1,i:.5,snd:0};},
   sound:    function(m){return m?{x:.08,y:.6,s:.55,tilt:1.52,i:1,snd:1}:{x:1.02,y:.12,s:.84,tilt:1.55,i:1,snd:1};},
   clients:  function(m){return m?{x:-.1,y:.5,s:.5,tilt:.9,i:.6,snd:.3}:{x:-1.35,y:.15,s:.9,tilt:.95,i:.6,snd:.3};},
-  end:      function(m){return m?{x:0,y:-1.75,s:1.3,tilt:.16,i:.75,snd:0}:{x:0,y:-1.62,s:2.6,tilt:.1,i:.75,snd:0};}
+  end:      function(m){return m?{x:0,y:-1.08,s:1.3,tilt:.16,i:.75,snd:0}:{x:0,y:-1.62,s:2.6,tilt:.1,i:.75,snd:0};}
 };
 var KEYS=['x','y','s','tilt','i','snd'];
 var secs=[].slice.call(document.querySelectorAll('[data-ring]'));
@@ -220,13 +223,15 @@ modeBtns.forEach(function(b){if(!ok&&b.getAttribute('data-mode')==='gl'){b.disab
   b.addEventListener('click',function(){if(b.disabled)return;applyMode(b.getAttribute('data-mode'),true);});});
 applyMode(mode,false);
 var fc=document.getElementById('flat'),fx=fc.getContext('2d');
-function sizeFlat(){var d=Math.min(devicePixelRatio||1,2);fc.width=Math.round(innerWidth*d);fc.height=Math.round(innerHeight*d);fx.setTransform(d,0,0,d,0,0);}
-sizeFlat();addEventListener('resize',sizeFlat);
+function measureView(){VW=fc.clientWidth||innerWidth;VH=fc.clientHeight||innerHeight;}
+measureView();
+function sizeFlat(){var d=Math.min(devicePixelRatio||1,2);fc.width=Math.round(VW*d);fc.height=Math.round(VH*d);fx.setTransform(d,0,0,d,0,0);}
+sizeFlat();
 function P3(lx,ly,lz){var p=S.p,t=p.tilt+S.par[1],c=Math.cos(t),s=Math.sin(t);var x=lx,y=c*ly-s*lz,z=s*ly+c*lz;
   var cy=Math.cos(S.par[0]),sy=Math.sin(S.par[0]);var x2=cy*x+sy*z,z2=-sy*x+cy*z;x=x2+p.x;y=y+p.y;z=z2;var qz=z-4.2;
-  return [innerWidth/2+x*1.6/(-qz)*innerHeight,innerHeight/2-y*1.6/(-qz)*innerHeight,z2];}
+  return [VW/2+x*1.6/(-qz)*VH,VH/2-y*1.6/(-qz)*VH,z2];}
 function drawFlat(time){
-  var W=innerWidth,H=innerHeight;fx.clearRect(0,0,W,H);
+  var W=VW,H=VH;fx.clearRect(0,0,W,H);
   var p=S.p,intro=RM?1:clamp((time-1.45)/1.1,0,1),I=p.i*intro;if(I<.01)return;
   var A=S.acc.map(function(v){return Math.round(v*255);});
   function ac(a){return 'rgba('+A[0]+','+A[1]+','+A[2]+','+a+')';}
@@ -268,10 +273,13 @@ function drawFlat(time){
 }
 var quality=1;
 function size(){
-  var dpr=Math.min(devicePixelRatio||1,2),sc=(mobile()?.62*dpr:Math.min(.9*dpr,1800/innerWidth))*quality;
-  cv.width=Math.round(innerWidth*sc);cv.height=Math.round(innerHeight*sc);if(ok)gl.viewport(0,0,cv.width,cv.height);
+  var dpr=Math.min(devicePixelRatio||1,2),sc=(mobile()?.62*dpr:Math.min(.9*dpr,1800/VW))*quality;
+  cv.width=Math.round(VW*sc);cv.height=Math.round(VH*sc);if(ok)gl.viewport(0,0,cv.width,cv.height);
 }
-size();addEventListener('resize',size);
+size();
+// re-allocate the canvases only when the stage really changes size (rotation, desktop window resize), not on every URL-bar toggle
+var lastVW=VW,lastVH=VH;
+addEventListener('resize',function(){measureView();if(VW!==lastVW||Math.abs(VH-lastVH)>1){lastVW=VW;lastVH=VH;size();sizeFlat();}});
 
 /* projection (mirror of shader) to aim the tangent at the pointer */
 function proj(th){
@@ -279,7 +287,7 @@ function proj(th){
   var x=p.s*Math.cos(th),y=0,z=p.s*Math.sin(th);
   var y1=c*y-s*z,z1=s*y+c*z;y=y1;z=z1;
   var cy=Math.cos(S.par[0]),sy=Math.sin(S.par[0]);var x2=cy*x+sy*z,z2=-sy*x+cy*z;x=x2;z=z2;
-  x+=p.x;y+=p.y;var qz=z-4.2;return [innerWidth/2+x*1.6/(-qz)*innerHeight,innerHeight/2-y*1.6/(-qz)*innerHeight];
+  x+=p.x;y+=p.y;var qz=z-4.2;return [VW/2+x*1.6/(-qz)*VH,VH/2-y*1.6/(-qz)*VH];
 }
 var mx=-1,my=-1,pointerIn=false;
 function aim(){
@@ -290,7 +298,8 @@ function aim(){
   for(i=0;i<90;i++){var a=i/90*Math.PI*2;pp=proj(a);var d=Math.atan2(pp[1]-cy,pp[0]-cx)-ma;d=Math.abs(Math.atan2(Math.sin(d),Math.cos(d)));if(d<bd){bd=d;best=a;}}
   S.thetaT=best;
 }
-addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;pointerIn=true;S.parT=[(e.clientX/innerWidth-.5)*.26,(e.clientY/innerHeight-.5)*.16];},{passive:true});
+// touch: a finger on the glass is a scroll, not a pointer. Without this the contact point froze at the last touch and stopped turning with scroll
+addEventListener('pointermove',function(e){if(e.pointerType==='touch')return;mx=e.clientX;my=e.clientY;pointerIn=true;S.parT=[(e.clientX/innerWidth-.5)*.26,(e.clientY/innerHeight-.5)*.16];},{passive:true});
 document.addEventListener('pointerleave',function(){pointerIn=false;S.parT=[0,0];});
 
 /* ---------- audio engine ---------- */
@@ -520,10 +529,12 @@ function frame(now){
   var dt=Math.min(.05,(now-lastNow)/1000);lastNow=now;
   var time=(now-T0)/1000,Y=scrollY;
   // adaptive quality
-  if(dt>.034){slow++;if(slow>40&&quality>.6){quality-=.15;size();slow=0;}}else slow=Math.max(0,slow-1);
+  if(dt>.034){slow++;if(slow>40&&quality>(mobile()?.45:.6)){quality-=.15;size();slow=0;}}else slow=Math.max(0,slow-1);
   // pose
   var tp=targetPose(),k1=1-Math.pow(.0009,dt);
   KEYS.forEach(function(q){S.p[q]=L(S.p[q],tp[q],k1);});
+  // touch: no pointer parallax, so the ring sways slowly and leans with scroll velocity instead
+  if(touch&&!RM){S.parT[0]=Math.sin(time*.31)*.06;S.parT[1]=clamp(-vel*.005,-.12,.12)+Math.sin(time*.23)*.03;}
   S.par[0]=L(S.par[0],S.parT[0],1-Math.pow(.02,dt));S.par[1]=L(S.par[1],S.parT[1],1-Math.pow(.02,dt));
   var gc=G[S.genre].rgb;for(var i=0;i<3;i++){var target=L(S.accBase[i],gc[i],S.p.snd);S.acc[i]=L(S.acc[i],target,1-Math.pow(.01,dt));}
   // theta: pointer, else drift + scroll
